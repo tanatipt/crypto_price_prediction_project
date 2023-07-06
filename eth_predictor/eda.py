@@ -9,7 +9,7 @@ def plot_year_target(eth_data):
 
     Plotting the closing price for each day throughout the year to determine the range of years our neural network should
     focus on to learn the trend. Results have shown that the ETH-USD price have risen dramatically after 2020 ; hence, we 
-    will only focus between 2020-11-01 to the current date to prevent the neural network from learning the more stable 
+    will only focus between 2021-01-01  to the current date to prevent the neural network from learning the more stable 
     trend in previous years.
 
     Args:
@@ -24,12 +24,11 @@ def plot_year_target(eth_data):
         year_data = eth_data[(eth_data['Date'] >= start_year)
                              & (eth_data['Date'] <= end_year)]
         year_target = year_data['Target']
-        print(year_target)
         plt.plot(list(year_target.index), year_target, label=year)
 
     plt.xlabel("Date")
     plt.ylabel("ETH-USD Price")
-    plt.title("ETH-USD Closing Price Change From 2018-2023")
+    plt.title("ETH-USD Closing Price From 2018-2023")
     plt.legend()
     plt.show()
 
@@ -44,7 +43,7 @@ def plot_year_summary(eth_data):
     """
 
     # Iterating through each year and plotting the closing price for each one.
-    for year in ['2018', '2019', '2020', '2021', '2022', '2023']:
+    for year in ['2021', '2022', '2023']:
         start_year = year + "-01-01"
         end_year = year + "-12-31"
         # Indexing the ETH-USD information for all the days within a single year
@@ -73,13 +72,14 @@ def plot_year_summary(eth_data):
 def plot_summary(eth_data):
     """
 
-    Plotting a summary statistics of each feature throughout the years between 2020 and 2023
+    Plotting a summary statistics of each feature throughout the years between 2021 and 2023
 
 
     Args:
         eth_data (Pandas Dataframe): A Dataframe containing the target and features for each date.
     """
-    feature_data = eth_data.drop(['Date'], axis=1)
+    feature_data = eth_data[eth_data["Date"]
+                            >= "2021-01-01"].drop(['Date'], axis=1)
     # Creating a Dataframe to store the summary statistics for each feature
     summary_stats = pd.DataFrame(
         feature_data.columns, columns=['Features'])
@@ -87,7 +87,7 @@ def plot_summary(eth_data):
     # Iterating through each feature between the year 2020 and 2023
     for i, feature in enumerate(feature_data.columns):
         feature_col = feature_data[feature]
-        # Computing the summary statistics using all values from a feature between 2020 and 2023
+        # Computing the summary statistics using all values from a feature between 2021 and 2023
         summary_stats.loc[i, "Min"] = np.amin(feature_col)
         summary_stats.loc[i, "Mean"] = np.mean(feature_col)
         summary_stats.loc[i, "Max"] = np.amax(feature_col)
@@ -102,19 +102,20 @@ def plot_summary(eth_data):
 def plot_feature_distribution(eth_data):
     """
 
-    Plot the distribution and box plot of each feature throughout the years between 2020 and 2023. These 
+    Plot the distribution and box plot of each feature throughout the years between 2021 and 2023. These 
     plots allow us to determine how to preprocess the dataset. Results have shown that the distribution of most 
     features are not normal so we should use normalisation to scale the dataset.
 
     Args:
         eth_data (Pandas Dataframe): A Dataframe containing the target and features for each date.
     """
-    feature_data = eth_data.drop(['Date'], axis=1)
+    feature_data = eth_data[eth_data["Date"]
+                            >= "2021-01-01"].drop(['Date'], axis=1)
 
-    # Iterating through each feature between the year 2020 and 2023
+    # Iterating through each feature between the year 2021 and 2023
     for feature in feature_data.columns:
         feature_col = feature_data[feature]
-        # Plotting the histogram of a feature's value for all the dates between 2020 and 2023
+        # Plotting the histogram of a feature's value for all the dates between 2021 and 2023
         plt.hist(feature_col, bins=20, edgecolor='black')
         plt.xlabel(feature)
         plt.ylabel("Value")
@@ -138,12 +139,12 @@ def plot_feature_distribution(eth_data):
 def plot_year_trend(eth_data):
     """
 
-    Plot to show how the value of each feature varies with the target variable in each year between 2020 and 2023
+    Plot to show how the value of each feature varies with the target variable in each year between 2021 and 2023
 
     Args:
         eth_data (Pandas Dataframe): A Dataframe containing the target and features for each date.
     """
-    for year in ['2018', '2019', '2020', '2021', '2022', '2023']:
+    for year in ['2021', '2022', '2023']:
         start_year = year + "-01-01"
         end_year = year + "-12-31"
         # Indexing the ETH-USD information for all the days within a single year
@@ -152,7 +153,7 @@ def plot_year_trend(eth_data):
         year_target = year_data['Target']
         feature_data = year_data.drop(['Date', 'Target'], axis=1)
 
-        # Iterating through each feature between the year 2020 and 2023
+        # Iterating through each feature between the year 2021 and 2023
         for feature in feature_data.columns:
             # Obtaining the feature value for each day in a year
             feature_col = feature_data[feature]
